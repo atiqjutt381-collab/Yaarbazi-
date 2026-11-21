@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ur"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Voice Party - YAARBAZI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#12081f;color:#fff;padding:16px}
+a{color:#ffd700;text-decoration:none}.top{display:flex;justify-content:space-between;align-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
+.mic{background:#2a1a4a;border:2px solid #444;border-radius:16px;padding:14px 4px;text-align:center;cursor:pointer}
+.mic.on{border-color:#00ff88;background:#1a4a2a}.mic .av{font-size:32px}.mic b{font-size:12px;display:block}
+.btn{background:#ffd700;color:#000;border:0;padding:14px;border-radius:12px;font-weight:800;width:100%;margin-top:14px;font-size:16px}
+.chat{background:#1c1c2e;border-radius:14px;padding:12px;margin-top:14px;max-height:180px;overflow:auto}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #444;background:#111;color:#fff;margin-top:10px}
+</style></head><body>
+<div class="top"><a href="games.html">⬅ Back</a><b>🎤 LIVE VOICE PARTY</b><span>🔴 128 Live</span></div>
+<p style="text-align:center">Mic Pe Daba Ke Baith Jao! 👇</p>
+<div class="grid" id="mics"></div>
+<button class="btn" onclick="joinMic()">🎤 MIC PE BAITHO</button>
+<div class="chat" id="chat"><div>🎉 <b>System:</b> Atiq Ne Room Banaya!</div><div>👋 <b>Sara:</b> Assalam-o-Alaikum Sab Ko!</div><div>😂 <b>Ali:</b> Aaj To Maza Ayega!</div></div>
+<input id="msg" placeholder="Message Likho..."><button class="btn" style="background:#7b61ff;color:#fff" onclick="send()">SEND 💬</button>
+<script>
+let names=["Atiq 👑","Sara","Ali","Fatima","Usman","Ayesha","Bilal","Hira","Ahmed"];
+let box=document.getElementById("mics");
+names.forEach((n,i)=>{let d=document.createElement("div");d.className="mic"+(i<3?" on":"");d.innerHTML=`<div class="av">${i==0?"👑":"🎤"}</div><b>${n}</b><small>${i<3?"🔊 Bol Raha":"💤 Khali"}</small>`;d.onclick=()=>{d.classList.toggle("on")};box.appendChild(d);});
+function joinMic(){alert("🎤 Mic On Ho Gaya! Ab Sab Tumhari Awaz Sun Sakte Hain! (Demo Mode)");}
+function send(){let m=document.getElementById("msg");if(!m.value)return;let c=document.getElementById("chat");c.innerHTML+=`<div>💬 <b>Tum:</b> ${m.value}</div>`;m.value="";c.scrollTop=c.scrollHeight;}
+</script></body></html>
