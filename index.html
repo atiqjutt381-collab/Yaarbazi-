@@ -1,138 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YAARBAZI - Voice Party</title>
-<meta name="theme-color" content="#000000">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YAARBAZI</title>
 <style>
-*{box-sizing:border-box}
-body{background:#000;color:#fff;font-family:Arial;margin:0;padding:10px;padding-bottom:90px}
-.top{background:linear-gradient(90deg,#FF8C00,#800080);padding:15px;border-radius:15px;text-align:center}
-.top h1{margin:0;color:#FFD700;font-size:30px;letter-spacing:2px}
-.box{background:#1a1a1a;padding:15px;border-radius:15px;margin-top:12px;border:1px solid #FFD700}
-input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #444;background:#222;color:#fff;font-size:15px;outline:none}
-input:focus{border-color:#FFD700}
-.btn{background:#FF8C00;color:#fff;border:none;padding:13px;width:100%;border-radius:10px;font-size:16px;font-weight:bold;margin-top:8px;cursor:pointer}
-.btn2{background:#FFD700;color:#000;border:none;padding:13px;width:100%;border-radius:10px;font-size:16px;font-weight:bold;margin-top:8px;cursor:pointer}
-.card{background:#222;padding:12px;border-radius:10px;margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-.joinBtn{background:#FFD700;border:none;padding:9px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
-.footer{text-align:center;color:#aaa;font-size:12px;margin-top:15px;line-height:24px}
-.footer a{color:#FFD700;text-decoration:none;cursor:pointer}
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:1000;padding:20px;overflow:auto}
-.modalBox{background:#1a1a1a;border:1px solid #FFD700;border-radius:15px;padding:15px}
-#installPopup{display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;border-top:2px solid #FFD700;padding:15px;text-align:center;z-index:999;border-radius:20px 20px 0 0}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#000;color:#fff;max-width:480px;margin:auto;min-height:100vh}
+.hidden{display:none!important}
+.top{padding:14px;text-align:center;border-bottom:2px solid #d4af37}
+.logo{font-size:28px;font-weight:900;color:#f5c518;letter-spacing:3px}
+.logo span{color:#ff7a00}
+.sub{font-size:11px;color:#aaa;letter-spacing:2px}
+.card{background:#111;border:1px solid #d4af37;border-radius:14px;padding:18px;margin:14px}
+h2{color:#f5c518;text-align:center;margin-bottom:12px}
+input{width:100%;padding:13px;margin:8px 0;border-radius:10px;border:1px solid #444;background:#222;color:#fff;outline:none;font-size:15px}
+input:focus{border-color:#f5c518}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px}
+.btn-gold{background:linear-gradient(90deg,#f5c518,#ff7a00);color:#000}
+.btn-purple{background:#7b2ff7;color:#fff}
+.btn-red{background:#ff2d55;color:#fff}
+.link{color:#f5c518;text-align:center;margin-top:12px;cursor:pointer;font-size:14px}
+.room-info{display:flex;justify-content:space-between;background:#111;border:1px solid #d4af37;border-radius:10px;padding:10px;margin:10px 14px;font-size:12px}
+.room-info b{color:#f5c518}
+.host{text-align:center;margin:10px}
+.host-img{width:78px;height:78px;border-radius:50%;border:3px solid #f5c518;object-fit:cover}
+.crown{color:#f5c518;font-size:20px}
+.mic-box{text-align:center;margin:8px}
+.mic{width:86px;height:86px;border-radius:50%;background:radial-gradient(circle,#ff7a00,#7b2ff7);display:flex;align-items:center;justify-content:center;font-size:36px;margin:auto;box-shadow:0 0 25px #ff7a00,0 0 25px #7b2ff7}
+.seats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px}
+.seat{background:#1a1a1a;border:1px solid #d4af37;border-radius:12px;padding:10px;display:flex;align-items:center;gap:10px}
+.seat img{width:48px;height:48px;border-radius:10px;object-fit:cover;border:2px solid #ff7a00}
+.seat b{font-size:14px}
+.seat span{font-size:11px;color:#f5c518}
+.seat .join{margin-left:auto;background:#ff7a00;color:#000;border:none;padding:6px 10px;border-radius:8px;font-weight:800;cursor:pointer}
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;padding:14px}
+.actions button{padding:12px 4px;border:none;border-radius:10px;font-weight:900;font-size:12px;cursor:pointer;color:#fff}
+.c1{background:#ff7a00}.c2{background:#d4af37;color:#000}.c3{background:#7b2ff7}.c4{background:#ff2d55}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#111;border-top:2px solid #d4af37;display:flex;justify-content:space-around;padding:10px 0}
+.nav div{text-align:center;font-size:11px;cursor:pointer;color:#aaa}
+.nav .active{color:#f5c518}
+.nav b{font-size:18px;display:block}
+.page{padding-bottom:80px}
+.list-item{background:#111;border:1px solid #333;border-radius:12px;padding:12px;margin:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.list-item b{color:#f5c518}
+.profile{text-align:center;padding:20px}
+.profile img{width:90px;height:90px;border-radius:50%;border:3px solid #f5c518;object-fit:cover}
+.coins{color:#f5c518;font-weight:900;margin:8px}
 </style>
 </head>
 <body>
 
-<div class="top">
-<h1>YAARBAZI</h1>
-<p>Voice Party - Live • Game • Rishta</p>
-<p id="welcomeText">👀 Browse Karo - Bina Login Ke Dekho!</p>
+<!-- LOGIN -->
+<div id="loginPage" class="page">
+<div class="top"><div class="logo">YAAR<span>BAZI</span></div><div class="sub">VOICE PARTY • LIVE • FUN</div></div>
+<div class="card">
+<h2>LOGIN</h2>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPass" type="password" placeholder="Password">
+<button class="btn btn-gold" onclick="doLogin()">LOGIN</button>
+<div class="link" onclick="showSignup()">No Account? Create Account</div>
+</div>
 </div>
 
-<div class="box" id="loginBox">
-<h3 style="color:#FFD700;text-align:center;margin:0">🔐 LOGIN / SIGNUP</h3>
-<p style="text-align:center;font-size:13px;color:#ccc">Room Join Karne Ke Liye Login Zaroori Hai</p>
-<input id="userName" placeholder="👤 Apna Naam - Signup Ke Liye">
-<input id="userPhone" placeholder="📱 Phone Number - 03XX-XXXXXXX">
-<input id="userPass" type="password" placeholder="🔒 Password">
-<button class="btn" onclick="doLogin()">LOGIN KARO</button>
-<button class="btn2" onclick="doSignup()">Naya Account - SIGNUP KARO</button>
-<p style="text-align:center;font-size:12px;color:#aaa">No OTP - Sirf Name, Phone, Password</p>
+<!-- SIGNUP -->
+<div id="signupPage" class="page hidden">
+<div class="top"><div class="logo">YAAR<span>BAZI</span></div><div class="sub">CREATE YOUR ACCOUNT</div></div>
+<div class="card">
+<h2>SIGN UP</h2>
+<input id="suName" placeholder="Full Name">
+<input id="suEmail" placeholder="Email">
+<input id="suPass" type="password" placeholder="Password">
+<button class="btn btn-gold" onclick="doSignup()">CREATE ACCOUNT</button>
+<div class="link" onclick="showLogin()">Already Have Account? Login</div>
+</div>
 </div>
 
-<div class="box">
-<h3>🔥 LIVE VOICE PARTY - Browse Karo</h3>
-<div class="card"><span>🎤 Mehfil - Host: Atiq King<br>👥 128 Live</span><button class="joinBtn" onclick="tryJoin('Mehfil')">JOIN</button></div>
-<div class="card"><span>🎤 Dosti Room<br>👥 85 Live</span><button class="joinBtn" onclick="tryJoin('Dosti Room')">JOIN</button></div>
-<button class="btn" onclick="tryJoin('New Room')">+ ROOM BANAO</button>
+<!-- MAIN APP -->
+<div id="appPage" class="page hidden">
+<div class="top"><div class="logo">YAAR<span>BAZI</span></div><div class="sub">WELCOME <span id="userNameTop" style="color:#ff7a00"></span></div></div>
+
+<!-- HOME / VOICE ROOM -->
+<div id="homeTab">
+<div class="room-info"><span>Room ID: <b>1287394</b></span><span>Listening: <b>12</b></span><span>Earnings: <b>1,240</b></span></div>
+<div class="host"><div class="crown">👑 HOST</div><img class="host-img" src="https://i.pravatar.cc/150?img=47"><div><b id="hostName">Aria</b> • <span style="color:#f5c518">LIVE</span></div></div>
+<div class="mic-box"><div class="mic">🎤</div><div style="margin-top:6px;color:#f5c518;font-weight:900">Mic is Live</div></div>
+<div class="seats" id="seatsBox"></div>
+<div class="actions">
+<button class="c1" onclick="alert('Challenge Started!')">CHALLENGE</button>
+<button class="c2" onclick="sendGift()">Gift</button>
+<button class="c3" onclick="alert('Chat Open!')">Chat</button>
+<button class="c4" onclick="spin()">Lucky Spin</button>
+</div>
+<div class="card"><h2>TOP ROOMS</h2>
+<div class="list-item"><span><b>Night Party</b><br>1.2K Listening</span><button class="btn btn-gold" style="width:auto;padding:8px 16px" onclick="alert('Joined Night Party')">JOIN</button></div>
+<div class="list-item"><span><b>Ludo King Room</b><br>850 Listening</span><button class="btn btn-gold" style="width:auto;padding:8px 16px" onclick="alert('Joined Ludo Room')">JOIN</button></div>
+</div>
 </div>
 
-<div class="box">
-<h3>🎲 GAMES</h3>
-<div class="card"><span>🎲 Ludo 4 Wala</span><span>PLAY ▶</span></div>
-<div class="card"><span>💍 Nikah Room - Rishta</span><span>OPEN ▶</span></div>
-<div class="card"><span>👮 Chor Police</span><span>PLAY ▶</span></div>
+<!-- PLAY -->
+<div id="playTab" class="hidden">
+<div class="card"><h2>GAMES</h2>
+<div class="list-item"><span><b>Ludo</b></span><button class="btn btn-gold" style="width:auto" onclick="alert('Ludo Started')">PLAY</button></div>
+<div class="list-item"><span><b>Lucky Spin</b></span><button class="btn btn-gold" style="width:auto" onclick="spin()">PLAY</button></div>
+<div class="list-item"><span><b>Quiz Battle</b></span><button class="btn btn-gold" style="width:auto" onclick="alert('Quiz Started')">PLAY</button></div>
+</div>
 </div>
 
-<div class="box">
-<h3>💰 TOPUP - Easypaisa</h3>
-<p>Atiq Ur Rehman - 03430864009 <button onclick="copyNum()" style="background:#FFD700;border:none;padding:4px 10px;border-radius:6px;font-weight:bold">COPY</button></p>
-<div class="card"><span>20 Rs = 25 Coins</span><span>BUY</span></div>
-<div class="card"><span>50 Rs = 70 Coins</span><span>BUY</span></div>
-<div class="card"><span>100 Rs = 150 Coins</span><span>BUY</span></div>
+<!-- FRIENDS -->
+<div id="friendsTab" class="hidden">
+<div class="card"><h2>FRIENDS</h2>
+<div class="list-item"><span><b>Rex</b> • Online</span><button class="btn btn-purple" style="width:auto" onclick="alert('Request Sent')">ADD</button></div>
+<div class="list-item"><span><b>Kai</b> • Online</span><button class="btn btn-purple" style="width:auto" onclick="alert('Request Sent')">ADD</button></div>
+<div class="list-item"><span><b>Nora</b> • Online</span><button class="btn btn-purple" style="width:auto" onclick="alert('Request Sent')">ADD</button></div>
+</div>
 </div>
 
-<div class="footer">
-<a onclick="openModal('terms')">Terms & Conditions</a> | 
-<a onclick="openModal('privacy')">Privacy Policy</a><br>
-<a onclick="openModal('about')">About Us</a> | 
-<a onclick="openModal('contact')">Contact Us</a> | 
-<a onclick="openModal('refund')">Refund Policy</a><br><br>
-© 2026 YAARBAZI - Voice Party<br>
-Made in Pakistan - Gojra, Punjab<br>
-Easypaisa: Atiq Ur Rehman - 03430864009
+<!-- REWARDS -->
+<div id="rewardsTab" class="hidden">
+<div class="card"><h2>REWARDS</h2>
+<p style="text-align:center">Your Coins: <b id="coins2" style="color:#f5c518">1000</b></p>
+<button class="btn btn-gold" onclick="claim()">CLAIM DAILY 100 COINS</button>
+<button class="btn btn-red" onclick="spin()">LUCKY SPIN - WIN COINS</button>
+</div>
+<div class="card"><h2>LEADERBOARD</h2>
+<div class="list-item"><span>1. Aria</span><b>5,400</b></div>
+<div class="list-item"><span>2. Rex</span><b>4,200</b></div>
+<div class="list-item"><span>3. Kai</span><b>3,800</b></div>
+</div>
 </div>
 
-<!-- MODAL -->
-<div id="myModal" class="modal"><div class="modalBox"><h3 id="modalTitle" style="color:#FFD700"></h3><p id="modalText" style="font-size:14px;line-height:22px;color:#ddd"></p><button class="btn" onclick="closeModal()">BAND KARO</button></div></div>
+<!-- PROFILE -->
+<div id="profileTab" class="hidden">
+<div class="profile">
+<img src="https://i.pravatar.cc/150?img=12">
+<h2 id="profileName">User</h2>
+<div class="coins">Coins: <span id="coins1">1000</span> • Level: 5</div>
+<button class="btn btn-gold" onclick="alert('Host Application Sent!')">APPLY FOR HOST</button>
+<button class="btn btn-red" onclick="logout()">LOGOUT</button>
+</div>
+</div>
 
-<!-- INSTALL POPUP -->
-<div id="installPopup">
-<h3 style="color:#FFD700;margin:5px">📱 YAARBAZI App Install Karo!</h3>
-<p style="font-size:13px;color:#ccc;margin:5px">Jaldi Khulega, Full Screen Chalega</p>
-<button onclick="installApp()" style="background:#FFD700;color:#000;border:none;padding:12px 25px;border-radius:10px;font-weight:bold">INSTALL KARO</button>
-<button onclick="closePopup()" style="background:#333;color:#fff;border:none;padding:12px 20px;border-radius:10px;margin-left:8px">Abhi Nahi</button>
+<div class="nav">
+<div class="active" onclick="tab('homeTab',this)"><b>🏠</b>Home</div>
+<div onclick="tab('playTab',this)"><b>🎮</b>Play</div>
+<div onclick="tab('friendsTab',this)"><b>👥</b>Friends</div>
+<div onclick="tab('rewardsTab',this)"><b>🎁</b>Rewards</div>
+<div onclick="tab('profileTab',this)"><b>👤</b>Profile</div>
+</div>
 </div>
 
 <script>
-let isLogin = localStorage.getItem('yaar_user') ? true : false;
-let deferredPrompt;
+let users = JSON.parse(localStorage.getItem('yaarbazi_users')||'[]');
+let current = JSON.parse(localStorage.getItem('yaarbazi_current')||'null');
+let coins = parseInt(localStorage.getItem('yaarbazi_coins')||'1000');
+let seats = [
+{name:'Rex',img:'https://i.pravatar.cc/150?img=11',tag:'Online'},
+{name:'Kai',img:'https://i.pravatar.cc/150?img=13',tag:'Online'},
+{name:'Nora',img:'https://i.pravatar.cc/150?img=32',tag:'Online'},
+{name:'Maya',img:'https://i.pravatar.cc/150?img=45',tag:'Online'},
+{name:'Leo',img:'https://i.pravatar.cc/150?img=15',tag:'Online'},
+{name:'Zoe',img:'https://i.pravatar.cc/150?img=44',tag:'Online'},
+{name:'Dev',img:'https://i.pravatar.cc/150?img=17',tag:'Online'},
+{name:'Sara',img:'https://i.pravatar.cc/150?img=31',tag:'Online'},
+];
+function renderSeats(){
+document.getElementById('seatsBox').innerHTML = seats.map((s,i)=>`<div class="seat"><img src="${s.img}"><div><b>${s.name}</b><br><span>${s.tag}</span></div><button class="join" onclick="joinSeat(${i})">JOIN</button></div>`).join('');
+}
+function showSignup(){document.getElementById('loginPage').classList.add('hidden');document.getElementById('signupPage').classList.remove('hidden');}
+function showLogin(){document.getElementById('signupPage').classList.add('hidden');document.getElementById('loginPage').classList.remove('hidden');}
 function doSignup(){
-  let n=document.getElementById('userName').value;
-  let p=document.getElementById('userPhone').value;
-  let pw=document.getElementById('userPass').value;
-  if(!n||!p||!pw){alert('Bhai! Naam, Phone, Password Sab Likho');return;}
-  localStorage.setItem('yaar_user', JSON.stringify({name:n,phone:p}));
-  alert('Mubarak Ho '+n+'! Account Ban Gaya!');
-  afterLogin(n);
+let n=document.getElementById('suName').value.trim(),e=document.getElementById('suEmail').value.trim(),p=document.getElementById('suPass').value;
+if(!n||!e||!p) return alert('Please Fill All Fields');
+if(users.find(u=>u.email===e)) return alert('Email Already Exists - Please Login');
+users.push({name:n,email:e,pass:p});localStorage.setItem('yaarbazi_users',JSON.stringify(users));
+current={name:n,email:e};localStorage.setItem('yaarbazi_current',JSON.stringify(current));
+openApp();
 }
 function doLogin(){
-  let p=document.getElementById('userPhone').value;
-  let pw=document.getElementById('userPass').value;
-  if(!p||!pw){alert('Phone Aur Password Likho');return;}
-  let u=localStorage.getItem('yaar_user');
-  if(u){ afterLogin(JSON.parse(u).name); } else { alert('Pehle Signup Karo!'); }
+let e=document.getElementById('loginEmail').value.trim(),p=document.getElementById('loginPass').value;
+let u=users.find(x=>x.email===e && x.pass===p);
+if(!u) return alert('Wrong Email or Password');
+current={name:u.name,email:u.email};localStorage.setItem('yaarbazi_current',JSON.stringify(current));
+openApp();
 }
-function afterLogin(name){
-  document.getElementById('welcomeText').innerHTML='👋 Welcome '+name+' | ID: 1287394 | 💰 100 Coins';
-  document.getElementById('loginBox').style.display='none';
-  isLogin=true;
+function openApp(){
+document.getElementById('loginPage').classList.add('hidden');
+document.getElementById('signupPage').classList.add('hidden');
+document.getElementById('appPage').classList.remove('hidden');
+document.getElementById('userNameTop').innerText=current.name.toUpperCase();
+document.getElementById('profileName').innerText=current.name;
+updateCoins();
+renderSeats();
 }
-function tryJoin(room){
-  if(!isLogin){ alert('Pehle Login Karo Bhai! Uper Login Box Me Login Karo'); document.getElementById('loginBox').scrollIntoView(); return; }
-  alert(room+' Me Join Ho Gaye! 🎤');
+function logout(){localStorage.removeItem('yaarbazi_current');location.reload();}
+function tab(id,el){
+['homeTab','playTab','friendsTab','rewardsTab','profileTab'].forEach(t=>document.getElementById(t).classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+document.querySelectorAll('.nav div').forEach(d=>d.classList.remove('active'));el.classList.add('active');
 }
-function copyNum(){ navigator.clipboard.writeText('03430864009'); alert('Number Copy Ho Gaya!'); }
-function openModal(type){
-  let t='',txt='';
-  if(type=='terms'){t='Terms & Conditions';txt='1. 18+ Umar Wale Hi App Use Karein.<br>2. Gali / Ganda Content Mana Hai.<br>3. Fake Payment Par Account Block Hoga.<br>4. Rishta Room Me Sirf Serious Log Aayen.';}
-  if(type=='privacy'){t='Privacy Policy';txt='Hum Aapka Naam Aur Phone Sirf Login Ke Liye Rakhte Hain.<br>Larki Ki Pic Kabhi Save Nahi Hoti.<br>Aapka Data Kisi Ko Nahi Diya Jata.';}
-  if(type=='about'){t='About Us';txt='YAARBAZI - Pakistan Ka Apna Voice Party App. Yahan Dosti, Games Aur Halal Rishta Sab Ek Jagah.';}
-  if(type=='contact'){t='Contact Us';txt='WhatsApp / Easypaisa: Atiq Ur Rehman - 03430864009<br>Gojra, Punjab, Pakistan';}
-  if(type=='refund'){t='Refund Policy';txt='Ghalat Payment Par 24 Ghante Me Screenshot Bhejo, Paise Wapis Milenge. Coins Use Hone Ke Baad Refund Nahi Hoga.';}
-  document.getElementById('modalTitle').innerHTML=t;
-  document.getElementById('modalText').innerHTML=txt;
-  document.getElementById('myModal').style.display='block';
-}
-function closeModal(){document.getElementById('myModal').style.display='none';}
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installPopup').style.display='block';});
-function installApp(){ if(deferredPrompt){deferredPrompt.prompt();} else {alert('Browser Menu -> Add to Home Screen Dabao');} document.getElementById('installPopup').style.display='none'; }
-function closePopup(){document.getElementById('installPopup').style.display='none';}
-setTimeout(()=>{ if(!isLogin) document.getElementById('installPopup').style.display='block'; },3000);
-// Admin: Logo 13 Click - Baad Me Add Karenge
+function joinSeat(i){alert('You Joined '+seats[i].name+' Seat!');}
+function sendGift(){coins+=10;updateCoins();alert('Gift Sent! +10 Coins');}
+function claim(){coins+=100;updateCoins();alert('100 Coins Claimed!');}
+function spin(){let w=Math.floor(Math.random()*100)+10;coins+=w;updateCoins();alert('You Won '+w+' Coins!');}
+function updateCoins(){localStorage.setItem('yaarbazi_coins',coins);document.getElementById('coins1').innerText=coins;document.getElementById('coins2').innerText=coins;}
+if(current){openApp();}
+renderSeats();
 </script>
 </body>
 </html>
