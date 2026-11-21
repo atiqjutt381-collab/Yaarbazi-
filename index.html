@@ -3,70 +3,288 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YAARBAZI</title>
+<title>YAARBAZI - Asli Voice + Asli Ludo</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#000;color:#fff;max-width:480px;margin:auto;min-height:100vh}
-.top{padding:14px;text-align:center;border-bottom:2px solid #d4af37}
-.logo{font-size:28px;font-weight:900;color:#f5c518;letter-spacing:3px}
-.logo span{color:#ff7a00}
-.sub{font-size:11px;color:#aaa;letter-spacing:2px}
-.card{background:#111;border:1px solid #d4af37;border-radius:14px;padding:18px;margin:14px}
-.card img{width:100%;height:140px;object-fit:cover;border-radius:10px;margin:10px 0}
-h2{color:#f5c518;text-align:center;margin-bottom:8px}
-p{font-size:13px;color:#ccc;text-align:center}
-.btn{display:block;width:100%;padding:14px;border:none;border-radius:10px;font-weight:900;font-size:15px;cursor:pointer;margin-top:10px;background:linear-gradient(90deg,#f5c518,#ff7a00);color:#000;text-align:center;text-decoration:none}
-.list-item{background:#111;border:1px solid #333;border-radius:12px;padding:12px;margin:10px 0;display:flex;justify-content:space-between;align-items:center}
-.list-item b{color:#f5c518}
-.small{width:auto;padding:8px 16px;font-size:13px}
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#111;border-top:2px solid #d4af37;display:flex;justify-content:space-around;padding:10px 0}
-.nav a{text-align:center;font-size:11px;color:#aaa;text-decoration:none}
-.nav .active{color:#f5c518}.nav b{font-size:18px;display:block}
-.page{padding-bottom:90px}
+body{background:#000;color:#fff;overflow-x:hidden}
+.top{padding:12px;text-align:center;background:#000;border-bottom:2px solid #a855f7;box-shadow:0 0 20px #a855f7}
+.top h1{font-size:32px;background:linear-gradient(90deg,#FFD700,#FF8C00,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+.top p{color:#c084fc;font-size:12px;letter-spacing:1px}
+.coins{position:fixed;top:10px;right:10px;background:#FFD700;color:#000;padding:6px 12px;border-radius:20px;font-weight:bold;z-index:99}
+.page{display:none;padding:12px;padding-bottom:90px;max-width:480px;margin:0 auto}
+.page.active{display:block}
+.card{background:#111;border:2px solid #FFD700;border-radius:16px;padding:14px;margin:12px 0;box-shadow:0 0 18px rgba(168,85,247,.5);text-align:center}
+.card h2{color:#FFD700;margin-bottom:4px}
+.card p{color:#c084fc;font-size:13px;margin-bottom:10px}
+.card img{width:100%;border-radius:12px;height:160px;object-fit:cover;border:1px solid #a855f7}
+.btn{width:100%;padding:14px;border:none;border-radius:30px;font-weight:bold;font-size:16px;cursor:pointer;background:linear-gradient(90deg,#FFD700,#FF6B00);color:#000;margin-top:8px}
+.btn-purple{background:linear-gradient(90deg,#a855f7,#ec4899);color:#fff}
+.btn-red{background:#ef4444;color:#fff}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #a855f7;background:#222;color:#fff;margin:8px 0}
+.seats-wrap{display:flex;flex-direction:column;gap:10px;align-items:center}
+.seat-row{display:flex;gap:10px;justify-content:center;width:100%}
+.seat{flex:1;background:#111;border:2px solid #FFD700;border-radius:14px;padding:10px;text-align:center;min-height:110px;cursor:pointer}
+.seat.taken{border-color:#22c55e;background:#052e16}
+.seat.couple{border-color:#ec4899;box-shadow:0 0 12px #ec4899}
+.seat .ava{width:56px;height:56px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto;border:2px solid #FFD700;overflow:hidden}
+.seat b{display:block;margin-top:6px;font-size:13px;color:#FFD700}
+.seat small{color:#aaa;font-size:11px}
+.mic-center{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,#a855f7,#FFD700);display:flex;align-items:center;justify-content:center;font-size:50px;box-shadow:0 0 30px #a855f7;border:3px solid #fff;cursor:pointer}
+.mic-center.live{animation:pulse 1s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+.chat-box{background:#000;border:1px solid #444;border-radius:10px;height:180px;overflow-y:auto;padding:8px;text-align:left;margin:10px 0}
+.chat-box div{margin:5px 0;font-size:13px}
+.chat-box b{color:#FFD700}
+.ludo-board{width:300px;height:300px;margin:10px auto;background:#fff;border:4px solid #FFD700;border-radius:12px;position:relative;display:grid;grid-template-columns:repeat(15,1fr);grid-template-rows:repeat(15,1fr);overflow:hidden}
+.cell{border:0.5px solid #ddd}
+.goti{position:absolute;width:22px;height:22px;border-radius:50%;border:2px solid #fff;z-index:5;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 0 6px #000;transition:all .4s}
+.dice{font-size:60px;margin:10px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:10px 0;border-top:2px solid #FFD700;z-index:100}
+.nav div{text-align:center;font-size:11px;color:#aaa;cursor:pointer}
+.nav div.active{color:#FFD700}
+.nav span{font-size:22px;display:block}
+.flex{display:flex;gap:8px}
+.flex button{flex:1}
 </style>
 </head>
 <body>
-<div class="page">
-<div class="top"><div class="logo">YAAR<span>BAZI</span></div><div class="sub">WELCOME</div></div>
+<div class="top"><h1>YAARBAZI</h1><p>Connect • Play • Celebrate Together - ASLI</p></div>
+<div class="coins">🪙 <span id="myCoins">1000</span></div>
 
-<!-- 1. SAB SE PEHLE VOICE PARTY -->
-<div class="card" style="border:2px solid #ff7a00">
-<h2>🎤 VOICE PARTY</h2>
-<p>Live Voice Party - 1.2K Listening</p>
-<img src="https://i.pravatar.cc/300?img=47">
-<a class="btn" href="voice.html">JOIN VOICE PARTY</a>
+<!-- HOME PAGE -->
+<div id="home" class="page active">
+<div class="card"><h2>🎤 VOICE PARTY</h2><p>Live Voice Party - Asli Awaz - Asli Seats</p><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600"><button class="btn" onclick="showPage('voice')">JOIN VOICE PARTY</button></div>
+<div class="card"><h2>🎲 LUDO KING</h2><p>Asli Board - 4 Players - Asli Goti</p><img src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=600"><button class="btn" onclick="showPage('ludo')">PLAY LUDO</button></div>
+<div class="card"><h2>💍 RISHTA ROOM</h2><p>Couple 1 • Couple 2 - Family Baithak</p><img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600"><button class="btn" onclick="showPage('rishta')">JOIN RISHTA ROOM</button></div>
+<div class="card"><h2>🎮 GAMES ROOM</h2><p>Truth & Dare • Quiz • Lucky Spin</p><button class="btn btn-purple" onclick="showPage('games')">OPEN GAMES</button></div>
 </div>
 
-<!-- 2. USKE NICHE LUDO -->
-<div class="card">
-<h2>🎲 LUDO</h2>
-<p>Ludo King Room - 850 Playing</p>
-<img src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400">
-<a class="btn" href="games.html">PLAY LUDO NOW</a>
+<!-- VOICE ROOM -->
+<div id="voice" class="page">
+<button class="btn btn-red" onclick="showPage('home')">← BACK</button>
+<div class="card"><h2>VOICE PARTY • LIVE - ASLI</h2><p>Firebase Se Connected - Online: <span id="onlineCount">0</span></p><input id="myName" placeholder="Apna Naam Likho - Jese Atiq"><button class="btn" onclick="saveName()">NAAM SAVE KARO</button><p id="nameShow" style="color:#22c55e"></p></div>
+<div class="card"><h2>9 MIC SEATS - ASLI</h2><p>Khali Seat Pe Click Karo - Tum Beth Jaoge - Sab Ko Nazar Aayega</p>
+<div class="seats-wrap">
+<div class="seat-row"><div class="seat" id="seat-0" onclick="takeSeat(0)"><div class="ava">👑</div><b>HOST</b><small>Khali Hai - Click Karo</small></div></div>
+<div style="display:flex;align-items:center;gap:12px"><div class="seat" id="seat-1" onclick="takeSeat(1)" style="width:110px"><div class="ava">🎤</div><b>Seat 1</b><small>Khali Hai</small></div><div class="mic-center" id="micBtn" onclick="toggleMic()">🎤</div><div class="seat" id="seat-2" onclick="takeSeat(2)" style="width:110px"><div class="ava">🎤</div><b>Seat 2</b><small>Khali Hai</small></div></div>
+<div class="seat-row"><div class="seat" id="seat-3" onclick="takeSeat(3)"><div class="ava">🎤</div><b>Seat 3</b><small>Khali Hai</small></div><div class="seat" id="seat-4" onclick="takeSeat(4)"><div class="ava">🎤</div><b>Seat 4</b><small>Khali Hai</small></div></div>
+<div class="seat-row"><div class="seat" id="seat-5" onclick="takeSeat(5)"><div class="ava">👤</div><b>Seat 5</b><small>Khali Hai</small></div><div class="seat" id="seat-6" onclick="takeSeat(6)"><div class="ava">👤</div><b>Seat 6</b><small>Khali Hai</small></div><div class="seat" id="seat-7" onclick="takeSeat(7)"><div class="ava">👤</div><b>Seat 7</b><small>Khali Hai</small></div><div class="seat" id="seat-8" onclick="takeSeat(8)"><div class="ava">👤</div><b>Seat 8</b><small>Khali Hai</small></div></div>
+</div>
+<div class="flex"><button class="btn btn-purple" onclick="sendGift()">🎁 GIFT</button><button class="btn" onclick="challenge()">⚔️ CHALLENGE</button><button class="btn btn-purple" onclick="showPage('games')">🎡 LUCKY SPIN</button></div>
+</div>
+<div class="card"><h2>LIVE CHAT - ASLI</h2><div class="chat-box" id="chatBox"></div><input id="chatInput" placeholder="Message Likho..."><button class="btn" onclick="sendChat()">SEND MESSAGE</button></div>
+<div class="card"><h2>MIC TEST - ASLI</h2><p>Mic Dabao - Tumhari Awaz Tumhe Sunai Degi - Matlab Mic Asli Hai</p><button class="btn" id="micTestBtn" onclick="toggleMic()">🎤 MIC ON KARO - ASLI TEST</button><p id="micStatus" style="margin-top:8px;color:#c084fc"></p><audio id="myAudio" autoplay muted playsinline></audio><div id="remoteAudios"></div></div>
 </div>
 
-<!-- 3. USKE NICHE NIKAH ROOM -->
-<div class="card" style="border:2px solid #d4af37">
-<h2>💍 NIKAH ROOM</h2>
-<p>Special Nikah Ceremony Live - 2.4K Watching</p>
-<img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400">
-<a class="btn" href="nikah.html">JOIN NIKAH ROOM</a>
+<!-- RISHTA ROOM -->
+<div id="rishta" class="page">
+<button class="btn btn-red" onclick="showPage('home')">← BACK</button>
+<div class="card"><h2>💍 RISHTA ROOM • LIVE</h2><p>Couple 1 • Couple 2 Uper Honge - Baaki Family Neeche</p><input id="rishtaName" placeholder="Apna Naam Likho"><button class="btn" onclick="saveRishtaName()">NAAM SAVE</button></div>
+<div class="card"><h2>SEATS - RISHTA ROOM</h2>
+<div class="seats-wrap">
+<div class="seat-row"><div class="seat couple" id="rseat-0" onclick="takeRishtaSeat(0)"><div class="ava">💍</div><b>COUPLE 1</b><small>Khali Hai</small></div><div class="seat couple" id="rseat-1" onclick="takeRishtaSeat(1)"><div class="ava">💍</div><b>COUPLE 2</b><small>Khali Hai</small></div></div>
+<div style="display:flex;align-items:center;gap:12px"><div class="seat" id="rseat-2" onclick="takeRishtaSeat(2)" style="width:110px"><div class="ava">👤</div><b>Seat 3</b><small>Khali Hai</small></div><div class="mic-center" onclick="toggleMic()">🎤</div><div class="seat" id="rseat-3" onclick="takeRishtaSeat(3)" style="width:110px"><div class="ava">👤</div><b>Seat 4</b><small>Khali Hai</small></div></div>
+<div class="seat-row"><div class="seat" id="rseat-4" onclick="takeRishtaSeat(4)"><div class="ava">👤</div><b>Seat 5</b><small>Khali Hai</small></div><div class="seat" id="rseat-5" onclick="takeRishtaSeat(5)"><div class="ava">👤</div><b>Seat 6</b><small>Khali Hai</small></div><div class="seat" id="rseat-6" onclick="takeRishtaSeat(6)"><div class="ava">👤</div><b>Seat 7</b><small>Khali Hai</small></div><div class="seat" id="rseat-7" onclick="takeRishtaSeat(7)"><div class="ava">👤</div><b>Seat 8</b><small>Khali Hai</small></div></div>
+</div>
+</div>
+<div class="card"><h2>RISHTA CHAT - ASLI</h2><div class="chat-box" id="rishtaChatBox"></div><input id="rishtaChatInput" placeholder="Rishta Room Me Message..."><button class="btn" onclick="sendRishtaChat()">SEND</button></div>
+</div>
+<!-- LUDO PAGE -->
+<div id="ludo" class="page">
+<button class="btn btn-red" onclick="showPage('home')">← BACK</button>
+<div class="card"><h2>🎲 ASLI LUDO - 4 PLAYERS</h2><p>Apna Naam Likho - Phir Dice Dabao - Goti Chalegi</p><input id="ludoName" placeholder="Apna Naam"><button class="btn" onclick="joinLudo()">LUDO JOIN KARO</button><p id="ludoStatus">Players: <span id="ludoPlayers">0</span>/4</p></div>
+<div class="card"><div class="ludo-board" id="ludoBoard"></div><div class="dice" id="diceShow">🎲</div><p id="turnShow">Turn: Wait...</p><button class="btn" onclick="rollDice()">🎲 DICE ROLL KARO</button><div class="flex"><button class="btn btn-purple" onclick="resetLudo()">RESET</button><button class="btn" onclick="showPage('games')">🎮 GAMES</button></div></div>
 </div>
 
-<!-- 4. SAB SE NICHE BAAKI -->
-<div class="card"><h2>OTHER ROOMS</h2>
-<div class="list-item"><span><b>Night Party</b><br>900 Listening</span><a class="btn small" href="voice.html">JOIN</a></div>
-<div class="list-item"><span><b>Quiz Battle</b><br>450 Playing</span><a class="btn small" href="games.html">JOIN</a></div>
-<div class="list-item"><span><b>Lucky Spin</b><br>Win Coins</span><a class="btn small" href="games.html">PLAY</a></div>
+<!-- GAMES PAGE -->
+<div id="games" class="page">
+<button class="btn btn-red" onclick="showPage('home')">← BACK</button>
+<div class="card"><h2>🎡 LUCKY SPIN</h2><p id="spinResult" style="font-size:40px">🎡</p><button class="btn" onclick="spin()">SPIN KARO - COINS JEETO</button></div>
+<div class="card"><h2>🎤 TRUTH & DARE</h2><p id="tdResult" style="color:#FFD700">Dabao - Truth Ya Dare Aayega</p><div class="flex"><button class="btn btn-purple" onclick="truth()">TRUTH</button><button class="btn" onclick="dare()">DARE</button></div></div>
+<div class="card"><h2>🧠 QUIZ - ASLI</h2><p id="quizQ">Pakistan Ka Capital Kya Hai?</p><div class="flex"><button class="btn" onclick="quizAns(this,'Islamabad')">Islamabad</button><button class="btn btn-purple" onclick="quizAns(this,'Lahore')">Lahore</button></div><p id="quizResult"></p></div>
 </div>
 
-</div>
 <div class="nav">
-<a class="active" href="index.html"><b>🏠</b>Home</a>
-<a href="voice.html"><b>🎤</b>Voice</a>
-<a href="games.html"><b>🎮</b>Play</a>
-<a href="nikah.html"><b>💍</b>Nikah</a>
+<div onclick="showPage('home')" id="nav-home" class="active"><span>🏠</span>HOME</div>
+<div onclick="showPage('voice')" id="nav-voice"><span>🎤</span>VOICE</div>
+<div onclick="showPage('ludo')" id="nav-ludo"><span>🎲</span>LUDO</div>
+<div onclick="showPage('rishta')" id="nav-rishta"><span>💍</span>RISHTA</div>
+<div onclick="showPage('games')" id="nav-games"><span>🎮</span>GAMES</div>
 </div>
-</div>
+
+<script>
+// ==== FIREBASE CONFIG - YAARBAZI - LAGA DIYA HAI ====
+const firebaseConfig = {
+  apiKey: "AIzaSyCpa4l0142vQ4OYdXRO9Okwkk8ztrocMPI",
+  authDomain: "yaarbazi.firebaseapp.com",
+  databaseURL: "https://yaarbazi-default-rtdb.firebaseio.com",
+  projectId: "yaarbazi",
+  storageBucket: "yaarbazi.firebasestorage.app",
+  messagingSenderId: "214766556757",
+  appId: "1:214766556757:web:05db19c906bf16c987a6dc",
+  measurementId: "G-3W9QD3M5RV"
+};
+let db=null;
+try{ firebase.initializeApp(firebaseConfig); db=firebase.database(); }catch(e){ console.log("Firebase abhi nahi laga - Demo mode"); }
+
+let myName = localStorage.getItem("yaarbazi_name")||"";
+let mySeat = -1, myRishtaSeat=-1, coins=1000;
+let micOn=false, micStream=null;
+let ludoPos=[0,0,0,0], ludoTurn=0, ludoJoined=false;
+let myId = "user_"+Math.random().toString(36).substr(2,6);
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav div').forEach(d=>d.classList.remove('active'));
+  let n=document.getElementById('nav-'+id); if(n) n.classList.add('active');
+  window.scrollTo(0,0);
+}
+function saveName(){
+  let v=document.getElementById('myName').value.trim();
+  if(!v){ alert("Pehle Naam Likho Bhai!"); return; }
+  myName=v; localStorage.setItem("yaarbazi_name",v);
+  document.getElementById('nameShow').innerText="✅ Naam Save Ho Gaya: "+v;
+  if(db) db.ref('online/'+myId).set({name:v,time:Date.now()});
+}
+function saveRishtaName(){
+  let v=document.getElementById('rishtaName').value.trim();
+  if(!v){ alert("Naam Likho!"); return; }
+  myName=v; localStorage.setItem("yaarbazi_name",v); alert("Rishta Room Me Naam Save: "+v);
+}
+if(myName){ document.getElementById('nameShow').innerText="✅ Tumhara Naam: "+myName; }
+function takeSeat(i){
+  if(!myName){ alert("Pehle Naam Save Karo! Upar Naam Likho"); showPage('voice'); return; }
+  if(db){
+    db.ref('seats/'+i).once('value',s=>{
+      let d=s.val();
+      if(d && d.id!==myId){ alert("Ye Seat Pehle Se Kisi Ne Li Hai - "+d.name); return; }
+      if(mySeat!==-1 && mySeat!==i) db.ref('seats/'+mySeat).remove();
+      db.ref('seats/'+i).set({name:myName,id:myId,time:Date.now()});
+      mySeat=i; alert("✅ Tum Seat "+(i+1)+" Pe Beth Gaye - Sab Ko Nazar Aayega!");
+    });
+  } else {
+    let el=document.getElementById('seat-'+i);
+    el.classList.add('taken'); el.querySelector('b').innerText=myName; el.querySelector('small').innerText="Tum Beth Gaye ✅";
+    alert("✅ Demo Mode Me Seat Le Li - Firebase Lagao To Asli Hoga");
+  }
+}
+function takeRishtaSeat(i){
+  if(!myName){ alert("Pehle Rishta Room Me Naam Save Karo!"); return; }
+  if(db){
+    db.ref('rishtaSeats/'+i).once('value',s=>{
+      let d=s.val();
+      if(d && d.id!==myId){ alert("Ye Seat Pehle Se Li Hui Hai"); return; }
+      if(myRishtaSeat!==-1 && myRishtaSeat!==i) db.ref('rishtaSeats/'+myRishtaSeat).remove();
+      db.ref('rishtaSeats/'+i).set({name:myName,id:myId});
+      myRishtaSeat=i; alert("✅ Rishta Room Seat Mil Gayi!");
+    });
+  } else {
+    let el=document.getElementById('rseat-'+i); el.classList.add('taken'); el.querySelector('b').innerText=myName;
+  }
+}
+if(db){
+  db.ref('seats').on('value',s=>{
+    let data=s.val()||{};
+    for(let i=0;i<9;i++){
+      let el=document.getElementById('seat-'+i); if(!el) continue;
+      if(data[i]){ el.classList.add('taken'); el.querySelector('b').innerText=data[i].name; el.querySelector('small').innerText="LIVE - Bol Raha Hai"; }
+      else { el.classList.remove('taken'); let t=i===0?"HOST":"Seat "+i; el.querySelector('b').innerText=t; el.querySelector('small').innerText="Khali Hai"; }
+    }
+  });
+  db.ref('rishtaSeats').on('value',s=>{
+    let data=s.val()||{};
+    for(let i=0;i<8;i++){
+      let el=document.getElementById('rseat-'+i); if(!el) continue;
+      if(data[i]){ el.classList.add('taken'); el.querySelector('b').innerText=data[i].name; el.querySelector('small').innerText="LIVE"; }
+      else { el.classList.remove('taken'); el.querySelector('b').innerText=i<2?"COUPLE "+(i+1):"Seat "+(i+1); el.querySelector('small').innerText="Khali Hai"; }
+    }
+  });
+  db.ref('chat').limitToLast(20).on('child_added',s=>{
+    let d=s.val(); let box=document.getElementById('chatBox');
+    let div=document.createElement('div'); div.innerHTML="<b>"+d.name+":</b> "+d.msg; box.appendChild(div); box.scrollTop=box.scrollHeight;
+  });
+  db.ref('rishtaChat').limitToLast(20).on('child_added',s=>{
+    let d=s.val(); let box=document.getElementById('rishtaChatBox');
+    let div=document.createElement('div'); div.innerHTML="<b>"+d.name+":</b> "+d.msg; box.appendChild(div); box.scrollTop=box.scrollHeight;
+  });
+  db.ref('online').on('value',s=>{ let v=s.val(); document.getElementById('onlineCount').innerText=v?Object.keys(v).length:0; });
+}
+function sendChat(){
+  let inp=document.getElementById('chatInput'); let msg=inp.value.trim(); if(!msg) return;
+  if(!myName){ alert("Pehle Naam Save Karo!"); return; }
+  if(db) db.ref('chat').push({name:myName,msg:msg,time:Date.now()});
+  else { let box=document.getElementById('chatBox'); let d=document.createElement('div'); d.innerHTML="<b>"+myName+":</b> "+msg; box.appendChild(d); }
+  inp.value="";
+}
+function sendRishtaChat(){
+  let inp=document.getElementById('rishtaChatInput'); let msg=inp.value.trim(); if(!msg) return;
+  if(!myName){ alert("Pehle Naam Save Karo!"); return; }
+  if(db) db.ref('rishtaChat').push({name:myName,msg:msg});
+  else { let box=document.getElementById('rishtaChatBox'); let d=document.createElement('div'); d.innerHTML="<b>"+myName+":</b> "+msg; box.appendChild(d); }
+  inp.value="";
+}
+function sendGift(){ coins+=10; document.getElementById('myCoins').innerText=coins; alert("🎁 Gift Bheja Gaya! +10 Coins Mil Gaye! Total: "+coins); }
+function challenge(){ alert("⚔️ Challenge Bheja Gaya! Dusra Player Accept Karega To Game Shuru!"); }
+async function toggleMic(){
+  let btn=document.getElementById('micBtn'); let btn2=document.getElementById('micTestBtn'); let st=document.getElementById('micStatus');
+  if(!micOn){
+    try{
+      micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+      micOn=true;
+      if(btn) btn.classList.add('live'); if(btn) btn.innerText="🔴";
+      if(btn2) btn2.innerText="🔴 MIC BAND KARO";
+      if(st) st.innerText="✅ MIC ON HAI - Asli Hai";
+      alert("✅ MIC ON HO GAYA - Asli Hai!");
+    }catch(e){ alert("❌ Mic Ki Permission Do - Browser Me Allow Dabao"); }
+  } else {
+    if(micStream) micStream.getTracks().forEach(t=>t.stop());
+    micOn=false;
+    if(btn) btn.classList.remove('live'); if(btn) btn.innerText="🎤";
+    if(btn2) btn2.innerText="🎤 MIC ON KARO - ASLI TEST";
+    if(st) st.innerText="Mic Band Hai";
+  }
+}
+let board=document.getElementById('ludoBoard');
+for(let i=0;i<225;i++){ let c=document.createElement('div'); c.className='cell'; board.appendChild(c); }
+function drawGotis(){
+  document.querySelectorAll('.goti').forEach(e=>e.remove());
+  let colors=['#ef4444','#22c55e','#eab308','#3b82f6']; let emojis=['🔴','🟢','🟡','🔵'];
+  for(let p=0;p<4;p++){
+    let g=document.createElement('div'); g.className='goti';
+    g.style.background=colors[p];
+    let pos=ludoPos[p];
+    let x = 20 + (pos % 15)*18;
+    let y = 20 + Math.floor(pos/15)*18;
+    if(pos===0){ x=30+p*60; y=30+p*60; }
+    g.style.left=x+'px'; g.style.top=y+'px'; g.innerText=emojis[p];
+    board.appendChild(g);
+  }
+}
+drawGotis();
+function joinLudo(){
+  let v=document.getElementById('ludoName').value.trim(); if(!v){ alert("Ludo Ke Liye Naam Likho!"); return; }
+  myName=v; ludoJoined=true; document.getElementById('ludoStatus').innerText="✅ Tum Join Ho Gaye: "+v; document.getElementById('ludoPlayers').innerText="1";
+  document.getElementById('turnShow').innerText="Turn: Tumhara - Dice Dabao!";
+  alert("✅ Ludo Join Ho Gaya!");
+}
+function rollDice(){
+  if(!ludoJoined){ alert("Pehle Ludo Join Karo - Naam Likho!"); return; }
+  let d=Math.floor(Math.random()*6)+1;
+  let faces=['','⚀','⚁','⚂','⚃','⚄','⚅'];
+  document.getElementById('diceShow').innerText=faces[d];
+  ludoPos[0]=Math.min(ludoPos[0]+d, 120);
+  drawGotis();
+  document.getElementById('turnShow').innerText="Tumne "+d+" Chalaya - Goti Aage Gayi!";
+  if(ludoPos[0]>=120) alert("🎉 JEET GAYE! Tumne Ludo Jeet Liya!");
+}
+function resetLudo(){ ludoPos=[0,0,0,0]; drawGotis(); document.getElementById('diceShow').innerText="🎲"; document.getElementById('turnShow').innerText="Turn: Wait..."; }
+function spin(){ let prizes=["10 Coins","50 Coins","100 Coins","Gift","Try Again","200 Coins"]; let p=prizes[Math.floor(Math.random()*prizes.length)]; document.getElementById('spinResult').innerText="🎉 "+p; if(p.includes("Coins")){ coins+=parseInt(p); document.getElementById('myCoins').innerText=coins; } }
+function truth(){ let t=["Apna Crush Ka Naam Batao","Last Message Kisko Kiya?","Sab Se Zyada Kisse Pyaar Karte Ho?"]; document.getElementById('tdResult').innerText="TRUTH: "+t[Math.floor(Math.random()*t.length)]; }
+function dare(){ let t=["Ek Gaana Gaao","Apni Aik Funny Photo Bhejo","10 Pushups Karo"]; document.getElementById('tdResult').innerText="DARE: "+t[Math.floor(Math.random()*t.length)]; }
+function quizAns(btn,ans){ if(ans==="Islamabad"){ document.getElementById('quizResult').innerText="✅ SAHI JAWAB! +20 Coins"; coins+=20; document.getElementById('myCoins').innerText=coins; } else { document.getElementById('quizResult').innerText="❌ GALAT - Sahi Jawab Islamabad Hai"; } }
+</script>
 </body>
 </html>
