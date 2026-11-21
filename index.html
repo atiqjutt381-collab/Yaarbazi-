@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YAARBAZI - Voice Party</title>
+<meta name="theme-color" content="#000000">
+<style>
+*{box-sizing:border-box}
+body{background:#000;color:#fff;font-family:Arial;margin:0;padding:10px;padding-bottom:90px}
+.top{background:linear-gradient(90deg,#FF8C00,#800080);padding:15px;border-radius:15px;text-align:center}
+.top h1{margin:0;color:#FFD700;font-size:30px;letter-spacing:2px}
+.box{background:#1a1a1a;padding:15px;border-radius:15px;margin-top:12px;border:1px solid #FFD700}
+input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #444;background:#222;color:#fff;font-size:15px;outline:none}
+input:focus{border-color:#FFD700}
+.btn{background:#FF8C00;color:#fff;border:none;padding:13px;width:100%;border-radius:10px;font-size:16px;font-weight:bold;margin-top:8px;cursor:pointer}
+.btn2{background:#FFD700;color:#000;border:none;padding:13px;width:100%;border-radius:10px;font-size:16px;font-weight:bold;margin-top:8px;cursor:pointer}
+.card{background:#222;padding:12px;border-radius:10px;margin-top:8px;display:flex;justify-content:space-between;align-items:center}
+.joinBtn{background:#FFD700;border:none;padding:9px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
+.footer{text-align:center;color:#aaa;font-size:12px;margin-top:15px;line-height:24px}
+.footer a{color:#FFD700;text-decoration:none;cursor:pointer}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:1000;padding:20px;overflow:auto}
+.modalBox{background:#1a1a1a;border:1px solid #FFD700;border-radius:15px;padding:15px}
+#installPopup{display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;border-top:2px solid #FFD700;padding:15px;text-align:center;z-index:999;border-radius:20px 20px 0 0}
+</style>
+</head>
+<body>
+
+<div class="top">
+<h1>YAARBAZI</h1>
+<p>Voice Party - Live • Game • Rishta</p>
+<p id="welcomeText">👀 Browse Karo - Bina Login Ke Dekho!</p>
+</div>
+
+<div class="box" id="loginBox">
+<h3 style="color:#FFD700;text-align:center;margin:0">🔐 LOGIN / SIGNUP</h3>
+<p style="text-align:center;font-size:13px;color:#ccc">Room Join Karne Ke Liye Login Zaroori Hai</p>
+<input id="userName" placeholder="👤 Apna Naam - Signup Ke Liye">
+<input id="userPhone" placeholder="📱 Phone Number - 03XX-XXXXXXX">
+<input id="userPass" type="password" placeholder="🔒 Password">
+<button class="btn" onclick="doLogin()">LOGIN KARO</button>
+<button class="btn2" onclick="doSignup()">Naya Account - SIGNUP KARO</button>
+<p style="text-align:center;font-size:12px;color:#aaa">No OTP - Sirf Name, Phone, Password</p>
+</div>
+
+<div class="box">
+<h3>🔥 LIVE VOICE PARTY - Browse Karo</h3>
+<div class="card"><span>🎤 Mehfil - Host: Atiq King<br>👥 128 Live</span><button class="joinBtn" onclick="tryJoin('Mehfil')">JOIN</button></div>
+<div class="card"><span>🎤 Dosti Room<br>👥 85 Live</span><button class="joinBtn" onclick="tryJoin('Dosti Room')">JOIN</button></div>
+<button class="btn" onclick="tryJoin('New Room')">+ ROOM BANAO</button>
+</div>
+
+<div class="box">
+<h3>🎲 GAMES</h3>
+<div class="card"><span>🎲 Ludo 4 Wala</span><span>PLAY ▶</span></div>
+<div class="card"><span>💍 Nikah Room - Rishta</span><span>OPEN ▶</span></div>
+<div class="card"><span>👮 Chor Police</span><span>PLAY ▶</span></div>
+</div>
+
+<div class="box">
+<h3>💰 TOPUP - Easypaisa</h3>
+<p>Atiq Ur Rehman - 03430864009 <button onclick="copyNum()" style="background:#FFD700;border:none;padding:4px 10px;border-radius:6px;font-weight:bold">COPY</button></p>
+<div class="card"><span>20 Rs = 25 Coins</span><span>BUY</span></div>
+<div class="card"><span>50 Rs = 70 Coins</span><span>BUY</span></div>
+<div class="card"><span>100 Rs = 150 Coins</span><span>BUY</span></div>
+</div>
+
+<div class="footer">
+<a onclick="openModal('terms')">Terms & Conditions</a> | 
+<a onclick="openModal('privacy')">Privacy Policy</a><br>
+<a onclick="openModal('about')">About Us</a> | 
+<a onclick="openModal('contact')">Contact Us</a> | 
+<a onclick="openModal('refund')">Refund Policy</a><br><br>
+© 2026 YAARBAZI - Voice Party<br>
+Made in Pakistan - Gojra, Punjab<br>
+Easypaisa: Atiq Ur Rehman - 03430864009
+</div>
+
+<!-- MODAL -->
+<div id="myModal" class="modal"><div class="modalBox"><h3 id="modalTitle" style="color:#FFD700"></h3><p id="modalText" style="font-size:14px;line-height:22px;color:#ddd"></p><button class="btn" onclick="closeModal()">BAND KARO</button></div></div>
+
+<!-- INSTALL POPUP -->
+<div id="installPopup">
+<h3 style="color:#FFD700;margin:5px">📱 YAARBAZI App Install Karo!</h3>
+<p style="font-size:13px;color:#ccc;margin:5px">Jaldi Khulega, Full Screen Chalega</p>
+<button onclick="installApp()" style="background:#FFD700;color:#000;border:none;padding:12px 25px;border-radius:10px;font-weight:bold">INSTALL KARO</button>
+<button onclick="closePopup()" style="background:#333;color:#fff;border:none;padding:12px 20px;border-radius:10px;margin-left:8px">Abhi Nahi</button>
+</div>
+
+<script>
+let isLogin = localStorage.getItem('yaar_user') ? true : false;
+let deferredPrompt;
+function doSignup(){
+  let n=document.getElementById('userName').value;
+  let p=document.getElementById('userPhone').value;
+  let pw=document.getElementById('userPass').value;
+  if(!n||!p||!pw){alert('Bhai! Naam, Phone, Password Sab Likho');return;}
+  localStorage.setItem('yaar_user', JSON.stringify({name:n,phone:p}));
+  alert('Mubarak Ho '+n+'! Account Ban Gaya!');
+  afterLogin(n);
+}
+function doLogin(){
+  let p=document.getElementById('userPhone').value;
+  let pw=document.getElementById('userPass').value;
+  if(!p||!pw){alert('Phone Aur Password Likho');return;}
+  let u=localStorage.getItem('yaar_user');
+  if(u){ afterLogin(JSON.parse(u).name); } else { alert('Pehle Signup Karo!'); }
+}
+function afterLogin(name){
+  document.getElementById('welcomeText').innerHTML='👋 Welcome '+name+' | ID: 1287394 | 💰 100 Coins';
+  document.getElementById('loginBox').style.display='none';
+  isLogin=true;
+}
+function tryJoin(room){
+  if(!isLogin){ alert('Pehle Login Karo Bhai! Uper Login Box Me Login Karo'); document.getElementById('loginBox').scrollIntoView(); return; }
+  alert(room+' Me Join Ho Gaye! 🎤');
+}
+function copyNum(){ navigator.clipboard.writeText('03430864009'); alert('Number Copy Ho Gaya!'); }
+function openModal(type){
+  let t='',txt='';
+  if(type=='terms'){t='Terms & Conditions';txt='1. 18+ Umar Wale Hi App Use Karein.<br>2. Gali / Ganda Content Mana Hai.<br>3. Fake Payment Par Account Block Hoga.<br>4. Rishta Room Me Sirf Serious Log Aayen.';}
+  if(type=='privacy'){t='Privacy Policy';txt='Hum Aapka Naam Aur Phone Sirf Login Ke Liye Rakhte Hain.<br>Larki Ki Pic Kabhi Save Nahi Hoti.<br>Aapka Data Kisi Ko Nahi Diya Jata.';}
+  if(type=='about'){t='About Us';txt='YAARBAZI - Pakistan Ka Apna Voice Party App. Yahan Dosti, Games Aur Halal Rishta Sab Ek Jagah.';}
+  if(type=='contact'){t='Contact Us';txt='WhatsApp / Easypaisa: Atiq Ur Rehman - 03430864009<br>Gojra, Punjab, Pakistan';}
+  if(type=='refund'){t='Refund Policy';txt='Ghalat Payment Par 24 Ghante Me Screenshot Bhejo, Paise Wapis Milenge. Coins Use Hone Ke Baad Refund Nahi Hoga.';}
+  document.getElementById('modalTitle').innerHTML=t;
+  document.getElementById('modalText').innerHTML=txt;
+  document.getElementById('myModal').style.display='block';
+}
+function closeModal(){document.getElementById('myModal').style.display='none';}
+window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installPopup').style.display='block';});
+function installApp(){ if(deferredPrompt){deferredPrompt.prompt();} else {alert('Browser Menu -> Add to Home Screen Dabao');} document.getElementById('installPopup').style.display='none'; }
+function closePopup(){document.getElementById('installPopup').style.display='none';}
+setTimeout(()=>{ if(!isLogin) document.getElementById('installPopup').style.display='block'; },3000);
+// Admin: Logo 13 Click - Baad Me Add Karenge
+</script>
+</body>
+</html>
